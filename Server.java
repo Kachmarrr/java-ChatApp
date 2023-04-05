@@ -71,15 +71,20 @@ public class Server implements Runnable {
             this.client = client;
         }
 
+
         @Override
         public void run(){
             try {
                 out = new PrintWriter(client.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                out.println("Please enter a nikcname: ");
+                out.println("Please enter a nickname: ");
                 nickname = in.readLine();
-                System.out.println(nickname + " connected! (👉ﾟヮﾟ)👉 ");
-                broadcast(nickname + "joined the chat! <❤️💕❤️> ");
+                if (nickname.equals("Kachmar")) { // порівнюємо рядки за допомогою equals()
+                    out.println("Hay wat's up owner ? ");
+                } else {
+                    System.out.println(nickname + " connected! (👉ﾟヮﾟ)👉 ");
+                    broadcast(nickname + " joined the chat! <❤️💕❤️> ");
+                }
                 String message;
                 while ((message = in.readLine()) != null) {
                     if (message.startsWith("/nick")) {
@@ -90,7 +95,7 @@ public class Server implements Runnable {
                             nickname = messageSplit[1];
                             out.println("Successfully changed nickname to " + nickname);
                         } else {
-                         out.println("No nickname provided!");
+                            out.println("No nickname provided!");
                         }
                     } else if (message.startsWith("/quit")) {
                         broadcast(nickname + " left the chat! 😥😭");
@@ -103,6 +108,7 @@ public class Server implements Runnable {
                 shutdown();
             }
         }
+
 
         public  void sendMassage(String message){
             out.println(message);
